@@ -4,6 +4,7 @@ import supabase from '../lib/supabase';
 
 export default function VerifyPage() {
   const [nim, setNim] = useState('');
+  const [nama, setNama] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -12,21 +13,32 @@ export default function VerifyPage() {
     setLoading(true);
     setMessage('');
 
-    // Cek apakah NIM ada di database
+    // Cek apakah NIM dan Nama ada di database
     const { data, error } = await supabase
-      .from('nim_list')
-      .select('nim, valid, vote')
+      .from('data_pemilih')
+      .select('nim, nama, valid, vote, wait')
       .eq('nim', nim)
+      .ilike('nama', nama)
       .single();
 
     if (error || !data) {
-      setMessage('NIM tidak ditemukan. Silakan periksa kembali.');
+      setMessage('NIM atau nama tidak ditemukan. Silakan periksa kembali.');
       setLoading(false);
       return;
     }
 
     if (!data.valid) {
-      setMessage('Tunggu, admin akan memvalidasi Anda.');
+      if (!data.wait) {
+        // Jika belum valid dan belum dalam antrian, set wait = true
+        await supabase
+          .from('data_pemilih')
+          .update({ wait: true })
+          .eq('nim', nim);
+
+        setMessage('Tunggu, admin akan memvalidasi Anda.');
+      } else {
+        setMessage('Permintaan validasi sudah dikirim, harap tunggu.');
+      }
       setLoading(false);
       return;
     }
@@ -37,7 +49,7 @@ export default function VerifyPage() {
       return;
     }
 
-    // Jika valid = true dan vote = false, maka redirect ke halaman voting
+    // Jika valid = true dan vote = false, redirect ke halaman voting
     setMessage('Verifikasi berhasil! Mengarahkan ke halaman voting...');
     setTimeout(() => {
       router.push('/voting');
@@ -50,6 +62,7 @@ export default function VerifyPage() {
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100'>
       <div className='bg-white p-6 rounded-lg shadow-lg text-center w-96'>
         <h1 className='text-xl font-bold mb-4 text-gray-700'>Verifikasi NIM</h1>
+
         <input
           type='text'
           value={nim}
@@ -57,12 +70,22 @@ export default function VerifyPage() {
           placeholder='Masukkan NIM'
           className='w-full p-2 border rounded-lg mb-4 text-gray-700'
         />
+
+        <input
+          type='text'
+          value={nama}
+          onChange={(e) => setNama(e.target.value)}
+          placeholder='Masukkan Nama'
+          className='w-full p-2 border rounded-lg mb-4 text-gray-700'
+        />
+
         <button
           onClick={handleVerify}
           disabled={loading}
           className='w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600'>
           {loading ? 'Memeriksa...' : 'Verifikasi'}
         </button>
+
         {message && <p className='mt-4 text-red-500'>{message}</p>}
       </div>
     </div>
