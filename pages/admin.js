@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import supabase from '../lib/supabase';
+import toast from 'react-hot-toast';
 
 export default function AdminPage() {
   const [users, setUsers] = useState([]);
@@ -12,10 +13,10 @@ export default function AdminPage() {
     const { data, error } = await supabase
       .from('data_pemilih')
       .select('nim, nama, valid, vote, wait')
-      .eq('wait', true); // Ambil hanya yang menunggu validasi
+      .eq('wait', true);
 
     if (error) {
-      console.error('Gagal mengambil data:', error);
+      toast.error('Gagal mengambil data!');
     } else {
       setUsers(data);
     }
@@ -24,23 +25,26 @@ export default function AdminPage() {
   async function verifyUser(nim) {
     const { error } = await supabase
       .from('data_pemilih')
-      .update({ valid: true, wait: false }) // Set valid = true & wait = false
+      .update({ valid: true, wait: false })
       .eq('nim', nim);
 
     if (error) {
-      console.error('Gagal memverifikasi:', error);
+      toast.error('Gagal memverifikasi!');
     } else {
-      setUsers(users.filter((user) => user.nim !== nim)); // Hapus dari daftar setelah verifikasi
+      toast.success('Pengguna terverifikasi!');
+      setUsers(users.filter((user) => user.nim !== nim));
     }
   }
 
   return (
-    <div className='min-h-screen flex flex-col items-center bg-gray-100 p-6'>
-      <h1 className='text-2xl font-bold text-gray-700 mb-6'>Dashboard Admin</h1>
+    <div className='min-h-screen flex flex-col items-center bg-gray-50 p-6'>
+      <h1 className='text-3xl font-bold text-green-600 mb-6'>
+        Dashboard Admin
+      </h1>
 
       <div className='w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg'>
-        <h2 className='text-xl font-semibold mb-4'>
-          Daftar Pemilih Menunggu Verifikasi
+        <h2 className='text-xl font-semibold mb-4 text-gray-700'>
+          Menunggu Verifikasi
         </h2>
 
         {users.length === 0 ? (
@@ -48,34 +52,28 @@ export default function AdminPage() {
             Tidak ada pemilih yang menunggu validasi.
           </p>
         ) : (
-          <table className='w-full border-collapse border border-gray-300'>
-            <thead>
-              <tr className='bg-gray-200'>
-                <th className='border border-gray-300 p-2'>NIM</th>
-                <th className='border border-gray-300 p-2'>Nama</th>
-                <th className='border border-gray-300 p-2'>Status Vote</th>
-                <th className='border border-gray-300 p-2'>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.nim} className='text-center'>
-                  <td className='border border-gray-300 p-2'>{user.nim}</td>
-                  <td className='border border-gray-300 p-2'>{user.nama}</td>
-                  <td className='border border-gray-300 p-2'>
-                    {user.vote ? 'Sudah' : 'Belum'}
-                  </td>
-                  <td className='border border-gray-300 p-2'>
-                    <button
-                      onClick={() => verifyUser(user.nim)}
-                      className='bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600'>
-                      Terverifikasi
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className='space-y-4'>
+            {users.map((user) => (
+              <div
+                key={user.nim}
+                className='flex justify-between items-center p-4 border-b border-gray-200'>
+                <div>
+                  <p className='text-lg font-medium text-gray-800'>
+                    {user.nama}
+                  </p>
+                  <p className='text-sm text-gray-500'>NIM: {user.nim}</p>
+                  <p className='text-sm text-gray-500'>
+                    Status Vote: {user.vote ? '✅ Sudah' : '❌ Belum'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => verifyUser(user.nim)}
+                  className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition'>
+                  Terverifikasi
+                </button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
