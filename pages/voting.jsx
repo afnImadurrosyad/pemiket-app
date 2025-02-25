@@ -35,8 +35,8 @@ export default function Home() {
     }
   }
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4'>
-      <h1 className='text-3xl font-bold mb-4 text-green-400'>TEST DULU</h1>
+    <div className='min-h-screen flex flex-col items-center justify-center bg-green-400 p-4'>
+      <h1 className='text-3xl font-bold mb-4 text-white-200'>TEST DULU</h1>
       <ul className='w-full max-w-md bg-white shadow-md rounded-lg p-4'>
         {votes.length > 0 ? (
           votes.map((vote) => (
