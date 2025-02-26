@@ -26,8 +26,6 @@ export default function VerifyPage() {
       return;
     }
 
-    setUser(data); // Simpan data user
-
     if (!data.valid) {
       if (!data.wait) {
         await supabase
@@ -50,6 +48,9 @@ export default function VerifyPage() {
       return;
     }
 
+    // ✅ Simpan data user di Local Storage agar halaman voting bisa mengaksesnya
+    localStorage.setItem('user', JSON.stringify(data));
+
     toast.success('Verifikasi berhasil! Mengarahkan ke voting...');
     setTimeout(() => {
       router.push('/voting');
@@ -60,7 +61,7 @@ export default function VerifyPage() {
   useEffect(() => {
     if (!nim) return;
 
-    // Setup Supabase Realtime Listener
+    //  Supabase Realtime Listener
     const subscription = supabase
       .channel('realtime verify')
       .on(
@@ -71,10 +72,15 @@ export default function VerifyPage() {
             toast.success(
               'Akun Anda sudah diverifikasi! Mengarahkan ke voting...'
             );
+            // Simpan ke Local Storage agar bisa diakses oleh halaman voting
+            localStorage.setItem('user', JSON.stringify(payload.new));
+
             setTimeout(() => {
               router.push('/voting');
-            }, 1000);
+            }, 2000);
           }
+          console.log('Payload:', payload);
+          handleVerify();
         }
       )
       .subscribe();

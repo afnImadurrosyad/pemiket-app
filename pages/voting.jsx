@@ -1,11 +1,27 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 
-export default function Home() {
+export default function VotingPage() {
   const [votes, setVotes] = useState([]);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
-  // 🔹 Ambil data votes dari Supabase
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+
+    if (!storedUser) {
+      router.push('/verify');
+      return;
+    }
+
+    setUser(storedUser);
+
+    if (storedUser.vote) {
+      router.push('/report');
+      return;
+    }
+
     async function fetchVotes() {
       const { data, error } = await supabase.from('votes').select('*');
 
@@ -14,29 +30,32 @@ export default function Home() {
     }
 
     fetchVotes();
-  }, []);
+  }, [router]);
 
-  // 🔹 Fungsi untuk menambah suara
   async function addVote(id, currentCount) {
-    const { error } = await supabase
+    if (!user) return;
+
+    const { error: voteError } = await supabase
       .from('votes')
-      .update({ count: currentCount + 1 }) // Tambah 1 suara
+      .update({ count: currentCount + 1 })
       .eq('id', id);
 
-    if (error) {
-      console.error('Error voting:', error);
+    const { error: userError } = await supabase
+      .from('data_pemilih')
+      .update({ vote: true })
+      .eq('nim', user.nim);
+
+    if (voteError || userError) {
+      console.error('Error voting:', voteError || userError);
     } else {
-      // Refresh data setelah vote
-      setVotes((prevVotes) =>
-        prevVotes.map((vote) =>
-          vote.id === id ? { ...vote, count: vote.count + 1 } : vote
-        )
-      );
+      localStorage.removeItem('user');
+      router.push('/report');
     }
   }
+
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-green-400 p-4'>
-      <h1 className='text-3xl font-bold mb-4 text-white-200'>TEST DULU</h1>
+      <h1 className='text-3xl font-bold mb-4 text-white'>Pilih Kandidat</h1>
       <ul className='w-full max-w-md bg-white shadow-md rounded-lg p-4'>
         {votes.length > 0 ? (
           votes.map((vote) => (

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import supabase from '../lib/supabase';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import style from '../styles/index.module.css';
 import { Menu, X } from 'lucide-react';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -37,6 +39,10 @@ export default function Home() {
 
     return () => clearInterval(countdown);
   }, []);
+
+  function goVote() {
+    router.push('/voting');
+  }
 
   return (
     <div className='min-h-fit flex flex-col bg-white'>
@@ -91,10 +97,15 @@ export default function Home() {
               Minutes {timeLeft.seconds} Seconds
             </p>
           </div>
+          <button
+            onClick={goVote}
+            className='bg-green-500 text-white p-2 rounded-lg mt-4'>
+            Vote Now!
+          </button>
         </div>
         <div></div>
       </div>
-      <div className='body-container min-h-screen'></div>
+      <div className='body-container m in-h-screen'></div>
     </div>
   );
 }
