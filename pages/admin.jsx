@@ -9,8 +9,15 @@ export default function AdminPage() {
   const [users, setUsers] = useState([]);
   const [userValid, setValid] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [adminUsername, setAdminUsername] = useState('');
 
   useEffect(() => {
+    const storedUsername = localStorage.getItem('admin_username');
+    if (!storedUsername) {
+      router.push('/admin-login'); // Redirect ke login jika tidak ada admin yang masuk
+    } else {
+      setAdminUsername(storedUsername);
+    }
     // Cek apakah admin sudah login
     const adminLogin = localStorage.getItem('admin_logged_in');
     if (!adminLogin) {
@@ -130,9 +137,22 @@ export default function AdminPage() {
     }
   }
 
-  function handleLogout() {
-    localStorage.removeItem('admin_logged_in'); // Hapus status login
-    router.push('/admin-login');
+  async function handleAdminLogout(username) {
+    const { error } = await supabase
+      .from('admin_users')
+      .update({ login: false })
+      .eq('username', username);
+
+    if (error) {
+      toast.error('Gagal logout Admin!');
+    } else {
+      toast.success('Admin Berhasil Logout!');
+      localStorage.removeItem('admin_logged_in'); // Hapus status login
+      localStorage.removeItem('admin_username'); // Hapus username
+      setTimeout(() => {
+        router.push('/admin-login'); // Redirect ke halaman login
+      }, 2000);
+    }
   }
 
   if (!isLoggedIn) return null; // Mencegah render sebelum cek login selesai
@@ -141,10 +161,8 @@ export default function AdminPage() {
     <div className='min-h-screen flex flex-col items-center bg-gray-50'>
       {/* list admin online */}
       <div className='bg-gray-700 min-w-20 mt-1 rounded-md max-h-6'>
-        {admins.length === 1 ? (
-          <p className='text-gray-600'>
-            Tidak ada admin lain yang sedang online.
-          </p>
+        {admins.length === 0 ? (
+          <p className='text-white'>Tidak ada admin lain yang sedang online.</p>
         ) : (
           <div className='flex flex-wrap'>
             <div className='text-white text-xs px-2 py-1 rounded-lg mb-1'>
@@ -164,7 +182,7 @@ export default function AdminPage() {
       <div className='flex justify-around items-center w-screen mb-4'>
         <h1 className='text-3xl font-bold text-green-600 '>Dashboard Admin</h1>
         <button
-          onClick={handleLogout}
+          onClick={() => handleAdminLogout(adminUsername)}
           className='bg-red-500 mr-4 mb-2 text-white text-xs px-2 py-2 rounded-lg hover:bg-red-700 transition'>
           Logout
         </button>

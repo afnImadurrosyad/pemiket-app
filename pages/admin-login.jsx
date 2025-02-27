@@ -14,7 +14,6 @@ export default function AdminLogin() {
 
     const { data: admin, error } = await supabase
       .from('admin_users')
-      .update({ login: true })
       .select('password')
       .eq('username', username)
       .single();
@@ -30,8 +29,17 @@ export default function AdminLogin() {
       return;
     }
 
+    await supabase
+      .from('admin_users')
+      .update({ login: true })
+      .eq('username', username);
+
     toast.success('Login berhasil!');
-    localStorage.setItem('admin_logged_in', 'true'); // Simpan status login
+
+    // Simpan username di localStorage
+    localStorage.setItem('admin_username', username);
+    localStorage.setItem('admin_logged_in', 'true');
+
     setTimeout(() => {
       router.push('/admin'); // Redirect ke halaman admin
     }, 1000);
