@@ -1,32 +1,80 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import toast from 'react-hot-toast';
 
 export default function AdminPage() {
+  const router = useRouter();
+  const [admins, setAdmin] = useState([]);
   const [users, setUsers] = useState([]);
   const [userValid, setValid] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Cek apakah admin sudah login
+    const adminLogin = localStorage.getItem('admin_logged_in');
+    if (!adminLogin) {
+      router.push('/admin-login'); // Redirect ke halaman login jika belum login
+      return;
+    }
+    setIsLoggedIn(true);
+
     fetchUsers();
     fetchvalid();
+    fetchAdmin();
 
     const subscription = supabase
       .channel('realtime admin')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'data_pemilih' },
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'data_pemilih',
+        },
         (payload) => {
           console.log('Realtime Update:', payload);
-          fetchUsers(); // Refresh data pengguna yang menunggu verifikasi
-          fetchvalid(); // Refresh data pengguna yang sudah valid
+          fetchUsers();
+          fetchvalid();
+        }
+      )
+      .subscribe();
+
+    const adminUsersSubscription = supabase
+      .channel('realtime-admin-users')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'admin_users',
+        },
+        (payload) => {
+          console.log('Realtime Update (admin_users):', payload);
+          fetchAdmin();
         }
       )
       .subscribe();
 
     return () => {
+      supabase.removeChannel(adminUsersSubscription);
       supabase.removeChannel(subscription);
     };
   }, []);
+
+  //fecth admin
+  async function fetchAdmin() {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('username')
+      .eq('login', true);
+
+    if (error) {
+      toast.error('Gagal mengambil data!');
+    } else {
+      setAdmin(data);
+    }
+  }
 
   async function fetchUsers() {
     const { data, error } = await supabase
@@ -67,6 +115,7 @@ export default function AdminPage() {
       setUsers(users.filter((user) => user.nim !== nim));
     }
   }
+
   async function deleteUser(nim) {
     const { error } = await supabase
       .from('data_pemilih')
@@ -81,11 +130,46 @@ export default function AdminPage() {
     }
   }
 
+  function handleLogout() {
+    localStorage.removeItem('admin_logged_in'); // Hapus status login
+    router.push('/admin-login');
+  }
+
+  if (!isLoggedIn) return null; // Mencegah render sebelum cek login selesai
+
   return (
-    <div className='min-h-screen flex flex-col items-center bg-gray-50 p-6'>
-      <h1 className='text-3xl font-bold text-green-600 mb-6'>
-        Dashboard Admin
-      </h1>
+    <div className='min-h-screen flex flex-col items-center bg-gray-50'>
+      {/* list admin online */}
+      <div className='bg-gray-700 min-w-20 mt-1 rounded-md max-h-6'>
+        {admins.length === 1 ? (
+          <p className='text-gray-600'>
+            Tidak ada admin lain yang sedang online.
+          </p>
+        ) : (
+          <div className='flex flex-wrap'>
+            <div className='text-white text-xs px-2 py-1 rounded-lg mb-1'>
+              Admin Online :
+            </div>
+            {admins.map((admin) => (
+              <div
+                key={admin.username}
+                className='text-white text-xs px-2 py-1 rounded-lg mb-1'>
+                {admin.username}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className='flex justify-around items-center w-screen mb-4'>
+        <h1 className='text-3xl font-bold text-green-600 '>Dashboard Admin</h1>
+        <button
+          onClick={handleLogout}
+          className='bg-red-500 mr-4 mb-2 text-white text-xs px-2 py-2 rounded-lg hover:bg-red-700 transition'>
+          Logout
+        </button>
+      </div>
+
       {/* laman bagian verifikasi */}
       <div className='w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg'>
         <h2 className='text-xl font-semibold mb-4 text-gray-700'>
@@ -121,6 +205,7 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+
       {/* laman bagian terverifikasi */}
       <div className='w-full max-w-3xl bg-white p-6 rounded-lg shadow-lg m-4'>
         <h2 className='text-xl font-semibold mb-4 text-gray-700'>
