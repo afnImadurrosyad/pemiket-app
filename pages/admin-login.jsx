@@ -46,10 +46,10 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className='min-h-screen flex justify-center items-center bg-gray-100'>
+    <div className='min-h-screen flex justify-center items-center bg-gray-100 '>
       <form
         onSubmit={handleLogin}
-        className='bg-white p-6 rounded-lg shadow-lg'>
+        className='bg-white p-6 rounded-lg max-w-96 -mx-4 shadow-lg border-t-4 border-green-400'>
         <h2 className='text-xl text-green-600 font-bold mb-4'>Admin Login</h2>
         <input
           type='text'

@@ -92,7 +92,7 @@ export default function VerifyPage() {
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-50'>
-      <div className='bg-white p-6 rounded-lg shadow-lg text-center w-96 border-t-4 border-green-400'>
+      <div className='bg-white p-6 rounded-lg shadow-lg text-center w-96 -mx-4 border-t-4 border-green-400'>
         <h1 className='text-xl font-bold mb-4 text-gray-700'>Verifikasi NIM</h1>
 
         <input
