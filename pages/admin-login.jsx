@@ -14,12 +14,17 @@ export default function AdminLogin() {
 
     const { data: admin, error } = await supabase
       .from('admin_users')
-      .select('password')
+      .select('password, login')
       .eq('username', username)
       .single();
 
     if (error || !admin) {
       toast.error('Username tidak ditemukan!');
+      return;
+    }
+
+    if (error || admin.login) {
+      toast.error('anda sudah login di perangkat lain!');
       return;
     }
 
