@@ -25,7 +25,10 @@ export default function VotingPage() {
     }
 
     async function fetchVotes() {
-      const { data, error } = await supabase.from('votes').select('*');
+      const { data, error } = await supabase
+        .from('votes')
+        .select('*')
+        .order('urut', { ascending: true });
 
       if (error) console.error('Supabase Error:', error);
       else setVotes(data);
