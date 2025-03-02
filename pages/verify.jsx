@@ -92,7 +92,7 @@ export default function VerifyPage() {
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-50'>
-      <div className='bg-white p-6 rounded-lg shadow-lg text-center w-96 -mx-4 border-t-4 border-green-400'>
+      <div className='bg-white p-6 rounded-lg shadow-lg text-center mx-4 border-t-4 border-green-400'>
         <h1 className='text-xl font-bold mb-4 text-gray-700'>Verifikasi NIM</h1>
 
         <input
@@ -104,7 +104,7 @@ export default function VerifyPage() {
         />
 
         <input
-          type='password'
+          type='text'
           value={nim}
           onChange={(e) => setNim(e.target.value)}
           placeholder='Masukkan NIM'
@@ -117,6 +117,21 @@ export default function VerifyPage() {
           className='w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition'>
           {loading ? 'Memeriksa...' : 'Verifikasi'}
         </button>
+      </div>
+      <div className='text-xs text-green-950 mt-4 mx-5'>
+        <ul className='list-disc'>
+          <li>Gunakan nama lengkap sesuai dengan data pada KTM anda</li>
+          <li>
+            Pengisian nama tidak berpengaruh pada huruf besar dan kecil (tidak
+            case sensitive)
+          </li>
+          <li>Pastikan tidak ada spasi di akhir nama</li>
+          <li>Setelah memverifikasi, tunggu sampai admin memverifikasi anda</li>
+          <li>
+            dan saat sudah terverifikasi halaman akan otomatis berganti ke laman
+            voting
+          </li>
+        </ul>
       </div>
     </div>
   );
