@@ -6,7 +6,6 @@ import toast from 'react-hot-toast';
 export default function VerifyPage() {
   const [nim, setNim] = useState('');
   const [nama, setNama] = useState('');
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 

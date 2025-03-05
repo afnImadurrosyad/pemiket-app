@@ -294,7 +294,7 @@ export default function AdminPage() {
               Daftar Pemilih
             </h2>
 
-            {/* 🔍 Input Search di Daftar Pemilih */}
+            {/* Input Search di Daftar Pemilih */}
             <div className='w-full'>
               <input
                 type='text'

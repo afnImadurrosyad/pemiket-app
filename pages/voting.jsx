@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import styles from '../styles/voting.module.css'; // Import CSS Module
+import toast from 'react-hot-toast';
 
 export default function VotingPage() {
   const [votes, setVotes] = useState([]);
@@ -35,6 +36,28 @@ export default function VotingPage() {
     }
 
     fetchVotes();
+
+    // 🔴 Realtime Listener untuk cek status valid
+    const subscription = supabase
+      .channel('realtime-voting')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'data_pemilih' },
+        (payload) => {
+          if (payload.new.nim === storedUser.nim && !payload.new.valid) {
+            toast.error('Status Anda tidak valid, mohon login ulang!');
+            localStorage.removeItem('user');
+            setTimeout(() => {
+              router.push('/verify');
+            }, 3000);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }, [router]);
 
   async function addVote(id, currentCount) {
@@ -66,9 +89,16 @@ export default function VotingPage() {
   };
 
   return (
-    <div className='bg-green-200 min-h-screen gradi flex flex-col justify-center'>
+    <div
+      className=' bg-green-200 min-h-screen gradi flex flex-col justify-center'
+      // style={{
+      //   backgroundImage: "url('bgVoting.jpg')",
+      //   backgroundSize: 'cover',
+      //   backgroundPosition: 'center',
+      // }}
+    >
       <div className='mb-6 '>
-        <h1 className='text-3xl font-bold text-green-700 text-center'>
+        <h1 className='text-2xl md:text-3xl font-bold mt-4 md:mt-0 text-green-700 text-center'>
           Calon Ketua Angkatan <br /> Teknik Informatika ITERA 24{' '}
         </h1>
       </div>
@@ -79,7 +109,7 @@ export default function VotingPage() {
               <div
                 onClick={() => flipCard(vote.id)}
                 key={vote.id}
-                className={`w-72 md:w-80 h-96 hover:scale-110 transform-gpu transition-transform duration-300 shadow-md gap-6 md:gap-0 ${styles['card-container']}`}>
+                className={`w-72 md:w-96 h-96 hover:scale-110 transform-gpu transition-transform duration-300 shadow-md gap-6 md:gap-0 ${styles['card-container']}`}>
                 <div
                   className={`${styles['card-inner']} ${
                     flipped[vote.id] ? styles.flipped : ''
@@ -93,8 +123,8 @@ export default function VotingPage() {
                       className='w-full h-full object-cover'
                     />
                     <div className='w-full bg-green-700 text-green-300 p-2 absolute bottom-0 flex flex-row justify-center items-center'>
-                      <div className='absolute text-lg left-0 ml-4 px-2  rounded-xl bg-yellow-500'>
-                        {vote.urut}
+                      <div className='absolute pt-4 text-2xl h-full px-4 font-bold left-0 flex justify-center bg-yellow-500 text-'>
+                        <p>{vote.urut}</p>
                       </div>
                       <div>
                         <h3 className='text-lg font-bold'>{vote.option}</h3>
@@ -107,26 +137,27 @@ export default function VotingPage() {
                   <div
                     className={`${styles['card-back']} bg-gradient-to-b from-green-600 to-green-800 text-white flex items-center justify-center text-center p-4`}>
                     <div>
-                      <h3 className='text-lg font-bold'>{vote.option}</h3>
-                      <p className='text-sm'>
+                      <h3 className=' text-md md:text-lg font-bold'>
+                        {vote.option}
+                      </h3>
+                      <p className='text-xs md:text-sm'>
                         Visi: <br /> {vote.visi} <br />
                       </p>
-                      <p className='text-sm'>
-                        Misi: <br /> {vote.misi}
-                      </p>
+                      <div className='text-xs md:text-sm'>
+                        <p className='font-bold'>Misi:</p>
+                        {vote.misi
+                          .match(/\d+\..+?(?=\d+\.|$)/gs)
+                          ?.map((misi, index) => (
+                            <p key={index}>{misi.trim()}</p>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* <button
-                className='mt-2 w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition'
-                onClick={() => flipCard(vote.id)}>
-                Putar balik
-              </button> */}
-
               <button
                 onClick={() => addVote(vote.id, vote.count)}
-                className='mt-2 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition mb-4'>
+                className='mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition mb-4'>
                 Vote
               </button>
             </div>
