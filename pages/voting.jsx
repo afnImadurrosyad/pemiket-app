@@ -49,7 +49,7 @@ export default function VotingPage() {
             localStorage.removeItem('user');
             setTimeout(() => {
               router.push('/verify');
-            }, 3000);
+            }, 1500);
           }
         }
       )

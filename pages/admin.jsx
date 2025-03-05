@@ -10,24 +10,13 @@ export default function AdminPage() {
   const [userValid, setValid] = useState([]);
   const [pemilih, setPemilih] = useState([]);
   const [searchQuery, setSearchQuery] = useState(''); // 🔹 State untuk pencarian
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [adminUsername, setAdminUsername] = useState('');
+  const [adminData, setAdminData] = useState('');
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('admin_username');
-    if (!storedUsername) {
-      router.push('/admin-login'); // Redirect ke login jika tidak ada admin yang masuk
-    } else {
-      setAdminUsername(storedUsername);
-    }
-    // Cek apakah admin sudah login
-    const adminLogin = localStorage.getItem('admin_logged_in');
-    if (!adminLogin) {
-      router.push('/admin-login'); // Redirect ke halaman login jika belum login
-      return;
-    }
-    setIsLoggedIn(true);
+    //run admin cek status sebelum render
+    isAdminSessionValid();
 
+    // fecth all data
     fetchUsers();
     fetchvalid();
     fetchAdmin();
@@ -71,6 +60,36 @@ export default function AdminPage() {
       supabase.removeChannel(subscription);
     };
   }, []);
+
+  //admin login status
+  function isAdminSessionValid() {
+    const adminDataStr = localStorage.getItem('admin_data');
+    console.log(adminDataStr);
+
+    if (!adminDataStr) {
+      setTimeout(() => {
+        router.push('/admin-login');
+      }, 1500);
+      return;
+    }
+
+    const adminData = JSON.parse(adminDataStr);
+    const currentTime = new Date().getTime();
+    console.log(currentTime);
+    console.log(adminData.loginTime);
+    const sessionDuration =
+      (currentTime - adminData.loginTime) / (1000 * 60 * 60);
+
+    console.log(sessionDuration);
+
+    setAdminData(adminData);
+
+    //time session
+    if (sessionDuration >= 0.3) {
+      handleAdminLogout(adminData.username);
+      return;
+    }
+  }
 
   //fecth admin
   async function fetchAdmin() {
@@ -166,15 +185,11 @@ export default function AdminPage() {
       toast.error('Gagal logout Admin!');
     } else {
       toast.success('Admin Berhasil Logout!');
-      localStorage.removeItem('admin_logged_in'); // Hapus status login
-      localStorage.removeItem('admin_username'); // Hapus username
       setTimeout(() => {
         router.push('/admin-login'); // Redirect ke halaman login
       }, 2000);
     }
   }
-
-  if (!isLoggedIn) return null; // Mencegah render dom sebelum cek login selesai
 
   return (
     <div className='min-h-screen relative flex flex-col items-center overflow-hidden bg-gray-50'>
@@ -204,7 +219,7 @@ export default function AdminPage() {
           Dashboard Admin
         </h1>
         <button
-          onClick={() => handleAdminLogout(adminUsername)}
+          onClick={() => handleAdminLogout(adminData.username)}
           className='bg-red-500 text-white text-xs mr-4 px-2 py-2 rounded-lg hover:bg-red-700 transition'>
           Logout
         </button>

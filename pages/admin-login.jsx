@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import bcrypt from 'bcryptjs';
@@ -9,8 +9,44 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  useEffect(() => {
+    const adminDataStr = localStorage.getItem('admin_data');
+    if (adminDataStr) {
+      const adminData = JSON.parse(adminDataStr);
+      const currentTime = new Date().getTime();
+      console.log(currentTime);
+      console.log(adminData.loginTime);
+      const sessionDuration =
+        (currentTime - adminData.loginTime) / (1000 * 60 * 60);
+
+      //time session harus sama dengan di admin
+      if (sessionDuration >= 0.3) {
+        toast.error('Mohon Login Kembali!');
+        toast.error('ADMIN SESSION EXPIRED');
+      }
+    }
+  }, []);
+
   async function handleLogin(e) {
     e.preventDefault();
+
+    const adminDataStr = localStorage.getItem('admin_data');
+    if (adminDataStr) {
+      const adminData = JSON.parse(adminDataStr);
+      const currentTime = new Date().getTime();
+      console.log(currentTime);
+      console.log(adminData.loginTime);
+      const sessionDuration =
+        (currentTime - adminData.loginTime) / (1000 * 60 * 60);
+
+      //time session harus sama dengan di admin
+      if (sessionDuration >= 0.03) {
+        await supabase
+          .from('admin_users')
+          .update({ login: false })
+          .eq('username', adminData.username);
+      }
+    }
 
     const { data: admin, error } = await supabase
       .from('admin_users')
@@ -41,9 +77,17 @@ export default function AdminLogin() {
 
     toast.success('Login berhasil!');
 
+    if (adminDataStr) {
+      localStorage.removeItem('admin_data'); // Hapus data admin
+    }
     // Simpan username di localStorage
-    localStorage.setItem('admin_username', username);
-    localStorage.setItem('admin_logged_in', 'true');
+    // Upon successful login
+    const loginData = {
+      username: username,
+      loggedIn: true,
+      loginTime: new Date().getTime(), // Current time in milliseconds
+    };
+    localStorage.setItem('admin_data', JSON.stringify(loginData));
 
     setTimeout(() => {
       router.push('/admin'); // Redirect ke halaman admin
