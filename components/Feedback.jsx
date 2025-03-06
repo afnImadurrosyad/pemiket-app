@@ -32,7 +32,7 @@ export default function Feedback() {
   }, []);
 
   return (
-    <section className='bg-green-100 py-10'>
+    <section className='bg-gray-100 py-10'>
       <div className='text-center mb-6'>
         <h2 className='text-2xl font-bold text-green-700'>Feedback Peserta</h2>
       </div>

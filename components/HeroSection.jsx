@@ -35,7 +35,7 @@ export default function HeroSection() {
   return (
     <section
       id='home'
-      className='relative bg-green-100 h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
+      className='relative bg-gray-100 h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
       <div className='mx-4'>
         <h1 className='text-4xl md:text-6xl font-bold'>
           Selamat Datang di Bumi Ketupat

@@ -49,7 +49,7 @@ export default function Carousel() {
   return (
     <section
       id='kandidat'
-      className='bg-green-100 border-y-2 border-green-500 w-full flex flex-col items-center py-6'>
+      className='bg-gray-100 border-y-2 border-green-500 w-full flex flex-col items-center py-6'>
       <h2 className='text-2xl font-bold text-green-700 my-4'>
         Kandidat Ketua Angkatan Algovista
       </h2>
