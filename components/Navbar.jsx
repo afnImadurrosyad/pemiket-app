@@ -35,7 +35,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`bg-green-200 fixed top-0 w-full max-h-fit text-green-700 text-mds shadow-lg z-50 transition-transform duration-300 ${
+      className={`bg-green-100 fixed top-0 w-full max-h-fit text-green-700 text-mds shadow-lg z-50 transition-transform duration-300 ${
         showNavbar ? 'translate-y-0' : '-translate-y-full'
       }`}>
       <div className='container mx-auto px-6 py-2 flex justify-between items-center'>
