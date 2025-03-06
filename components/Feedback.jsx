@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 
 const feedbacks = [
   {
-    name: 'Afnan Imadurrosyad',
+    name: 'c++',
     message: 'Acara yang luar biasa! Sangat menginspirasi dan penuh manfaat.',
     avatar: '/image/jpg/user1.jpg', // Sesuaikan dengan gambar yang tersedia
   },
   {
-    name: 'Rahmatullah',
+    name: 'Phyton',
     message: 'Sangat menyenangkan bisa terlibat dalam acara ini!',
     avatar: '/image/jpg/user2.jpg',
   },
   {
-    name: 'Siti Aminah',
+    name: 'Java',
     message: 'Saya mendapatkan banyak wawasan baru dari acara ini!',
     avatar: '/image/jpg/user3.jpg',
   },

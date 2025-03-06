@@ -59,10 +59,10 @@ export default function AdminLogin() {
       return;
     }
 
-    if (error || admin.login) {
-      toast.error('anda sudah login di perangkat lain!');
-      return;
-    }
+    // if (error || admin.login) {
+    //   toast.error('anda sudah login di perangkat lain!');
+    //   return;
+    // }
 
     const match = await bcrypt.compare(password, admin.password);
     if (!match) {
