@@ -27,7 +27,7 @@ export default function Form() {
   };
 
   return (
-    <section id='feedback' className=' py-10 px-6 md:px-12 pb-20 bg-gray-100'>
+    <section id='feedback' className=' py-10 px-6 md:px-12 pb-20 '>
       <motion.div
         className='max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8'
         initial={{ opacity: 0, y: 50 }}

@@ -40,7 +40,7 @@ export default function HeroSection() {
   return (
     <section
       id='home'
-      className='bg-gray-100 h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
+      className=' h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
       <div className='mx-4'>
         {/* Animasi Per Kata untuk Judul */}
         <h1 className='text-4xl md:text-6xl font-bold flex flex-wrap justify-center'>

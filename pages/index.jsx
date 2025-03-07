@@ -9,14 +9,25 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default function Home() {
   return (
-    <div className='overflow-x-hidden'>
-      <SpeedInsights />
-      <Analytics />
-      <Navbar />
-      <HeroSection />
-      <Corousel />
-      <Rundown />
-      <Feedback />
+    <div className='relative overflow-x-hidden min-h-screen bg-gray-100'>
+      {/* Background dengan opacity */}
+      <div
+        className='absolute inset-0 bg-cover bg-center'
+        style={{
+          backgroundImage: "url('/background.jpg')",
+          backgroundSize: '55%', // Mengecilkan ukuran background
+          opacity: 0.4, // Atur opacity ke 50%
+        }}
+      />
+
+      {/* Konten utama */}
+      <div className='relative z-10'>
+        <Navbar />
+        <HeroSection />
+        <Corousel />
+        <Rundown />
+        <Feedback />
+      </div>
     </div>
   );
 }

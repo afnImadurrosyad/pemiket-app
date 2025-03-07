@@ -34,7 +34,7 @@ export default function Rundown() {
   }, []);
 
   return (
-    <section id='rundown' className='py-10 px-6 bg-gray-100'>
+    <section id='rundown' className='py-10 px-6'>
       <motion.h2
         className='text-2xl md:text-3xl font-bold text-green-700 text-center mb-10'
         initial={{ opacity: 0, y: -50 }}

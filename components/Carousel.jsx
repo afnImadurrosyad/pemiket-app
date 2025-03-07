@@ -63,15 +63,13 @@ export default function Carousel() {
   };
 
   return (
-    <section
-      id='kandidat'
-      className='bg-gray-100 w-full flex flex-col items-center py-6'>
+    <section id='kandidat' className=' w-full flex flex-col items-center py-6'>
       <motion.h2
         className='text-2xl text-center font-bold text-green-700 my-4'
         initial={{ opacity: 0, y: +50, scale: 0 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        viewport={{ once: true }}>
+        viewport={{ once: false }}>
         Kandidat <br /> Ketua Angkatan Algovista
       </motion.h2>
 
@@ -83,7 +81,7 @@ export default function Carousel() {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: index * 0.2 }}
-            viewport={{ once: true }}>
+            viewport={{ once: false }}>
             <Card {...candidate} />
           </motion.div>
         ))}
@@ -110,7 +108,7 @@ export default function Carousel() {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            viewport={{ once: true }}>
+            viewport={{ once: false }}>
             <AnimatePresence custom={direction} mode='wait'>
               {candidates.length > 0 && (
                 <motion.div
