@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Corousel from '../components/Carousel';
 import HeroSection from '../components/HeroSection';
-import Feedbackk from '../components/Feedback';
+import Feedback from '../components/Feedback';
 import Rundown from './../components/Rundown';
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       <HeroSection />
       <Corousel />
       <Rundown />
-      <Feedbackk />
+      <Feedback />
     </div>
   );
 }

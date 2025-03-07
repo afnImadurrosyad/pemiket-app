@@ -33,7 +33,7 @@ export default function HeroSection() {
   };
 
   // **Split Text into Words** (untuk animasi per kata)
-  const sentence1 = 'Selamat Datang di BUMI KETUPAT'.split(' ');
+  const sentence1 = 'Selamat Datang di Bumi Ketupat'.split(' ');
   const sentence2 =
     'Platform informasi resmi untuk milih Ketang dua empat.'.split(' ');
 

@@ -1,79 +1,113 @@
-import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import emailjs from 'emailjs-com';
 
-const feedbacks = [
-  {
-    name: 'c++',
-    message: 'Acara yang luar biasa! Sangat menginspirasi dan penuh manfaat.',
-    avatar: '/image/jpg/user1.jpg', // Sesuaikan dengan gambar yang tersedia
-  },
-  {
-    name: 'Phyton',
-    message: 'Sangat menyenangkan bisa terlibat dalam acara ini!',
-    avatar: '/image/jpg/user2.jpg',
-  },
-  {
-    name: 'Java',
-    message: 'Saya mendapatkan banyak wawasan baru dari acara ini!',
-    avatar: '/image/jpg/user3.jpg',
-  },
-];
+export default function Form() {
+  const [submitted, setSubmitted] = useState(false);
 
-export default function Feedback() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const sendEmail = (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === feedbacks.length - 1 ? 0 : prevIndex + 1
+    emailjs
+      .sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+        e.target,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        (result) => {
+          console.log('Success:', result.text);
+          setSubmitted(true);
+        },
+        (error) => {
+          console.error('Error:', error.text);
+        }
       );
-    }, 5000); // Slide otomatis setiap 5 detik
-
-    return () => clearInterval(interval);
-  }, []);
+  };
 
   return (
-    <section className='bg-gray-100 py-10'>
-      <div className='text-center mb-6'>
-        <h2 className='text-2xl font-bold text-green-700'>Feedback Peserta</h2>
-      </div>
-      <div className='flex flex-col items-center'>
-        <div className='relative w-full max-w-lg overflow-hidden'>
-          {/* Feedback Cards */}
-          <div
-            className='flex transition-transform duration-500 ease-in-out'
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-            {feedbacks.map((feedback, index) => (
-              <div
-                key={index}
-                className='w-full flex-shrink-0 flex flex-col items-center text-center p-6 bg-white shadow-lg rounded-lg'>
-                <img
-                  src={feedback.avatar}
-                  alt={feedback.name}
-                  className='w-20 h-20 rounded-full mx-auto mb-4 object-cover border-2 border-green-500'
-                />
-                <p className='text-gray-700 italic'>"{feedback.message}"</p>
-                <h3 className='font-bold text-green-700 mt-2'>
-                  - {feedback.name}
-                </h3>
-              </div>
-            ))}
-          </div>
-        </div>
+    <section id='feedback' className=' py-10 px-6 md:px-12 pb-20 bg-gray-100'>
+      <motion.div
+        className='max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8'
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}>
+        {/* Judul */}
+        <motion.h2
+          className='text-2xl md:text-3xl font-bold text-green-700 text-center mb-6'
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}>
+          Feedback
+        </motion.h2>
 
-        {/* Dots Indicator */}
-        <div className='flex mt-4 space-x-2'>
-          {feedbacks.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-4 h-4 rounded-full transition-all ${
-                index === currentIndex
-                  ? 'bg-green-500 scale-110'
-                  : 'bg-gray-300'
-              }`}></button>
-          ))}
-        </div>
-      </div>
+        {/* Form */}
+        {!submitted ? (
+          <form
+            className='flex flex-col space-y-4 text-gray-700'
+            onSubmit={sendEmail} // Panggil sendEmail saat submit
+          >
+            {/* Input Name */}
+            <motion.input
+              type='text'
+              name='name'
+              placeholder='Your Name'
+              required
+              className='border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400'
+              whileFocus={{ scale: 1.05 }}
+            />
+
+            {/* Input Email */}
+            <motion.input
+              type='email'
+              name='email'
+              placeholder='Your Email'
+              required
+              className='border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400'
+              whileFocus={{ scale: 1.05 }}
+            />
+
+            {/* Textarea Message */}
+            <motion.textarea
+              name='message'
+              placeholder='Your Message'
+              rows='4'
+              required
+              className='border p-3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400'
+              whileFocus={{ scale: 1.05 }}
+            />
+
+            {/* Button Submit */}
+            <motion.button
+              type='submit'
+              className='bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md shadow-lg transition'
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}>
+              Send Message
+            </motion.button>
+          </form>
+        ) : (
+          <motion.p
+            className='text-green-700 font-semibold text-center mt-4'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}>
+            ✅ Thank you for your feedback!
+          </motion.p>
+        )}
+        {/* Contact Info */}
+        <motion.div
+          className='mt-8 text-center text-gray-700'
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}>
+          <h3 className='text-xl font-semibold'>Contact Information</h3>
+          <p className='mt-2 flex items-center justify-center gap-2'>📞 +62</p>
+          <p className='mt-1 flex items-center justify-center gap-2'>
+            📩 informaticsitera24@gmail.com
+          </p>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
