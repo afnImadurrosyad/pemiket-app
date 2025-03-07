@@ -33,7 +33,7 @@ export default function Carousel() {
       const interval = setInterval(() => {
         setDirection(1);
         setCurrentIndex((prevIndex) => (prevIndex + 1) % candidates.length);
-      }, 8000);
+      }, 12000);
       return () => clearInterval(interval);
     }
   }, [candidates, isMobile]);
@@ -70,7 +70,8 @@ export default function Carousel() {
         className='text-2xl text-center font-bold text-green-700 my-4'
         initial={{ opacity: 0, y: +50, scale: 0 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}>
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        viewport={{ once: true }}>
         Kandidat Ketua Angkatan Algovista
       </motion.h2>
 
@@ -82,7 +83,7 @@ export default function Carousel() {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: index * 0.2 }}
-            viewport={{ once: false }}>
+            viewport={{ once: true }}>
             <Card {...candidate} />
           </motion.div>
         ))}
@@ -104,7 +105,12 @@ export default function Carousel() {
           </button>
 
           {/* **Wrapper Card dengan min-height agar tidak hilang** */}
-          <div className='relative w-72 md:w-80flex justify-center items-center'>
+          <motion.div
+            className='relative w-72 md:w-80 flex justify-center items-center'
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            viewport={{ once: true }}>
             <AnimatePresence custom={direction} mode='wait'>
               {candidates.length > 0 && (
                 <motion.div
@@ -119,7 +125,7 @@ export default function Carousel() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
 
           {/* Tombol Next */}
           <button
