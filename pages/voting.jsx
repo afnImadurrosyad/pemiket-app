@@ -97,6 +97,7 @@ export default function VotingPage() {
       //   backgroundPosition: 'center',
       // }}
     >
+      <Analytics />
       <div className='mb-6 '>
         <h1 className='text-2xl md:text-3xl font-bold mt-4 md:mt-0 text-green-700 text-center'>
           Calon Ketua Angkatan <br /> Teknik Informatika ITERA 24{' '}

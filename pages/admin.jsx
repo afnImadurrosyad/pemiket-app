@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import toast from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -194,6 +195,7 @@ export default function AdminPage() {
   return (
     <div className='min-h-screen relative flex flex-col items-center overflow-hidden bg-gray-50'>
       {/* list admin online */}
+      <Analytics />
       <div className='bg-gray-700 fixed bottom-4 min-w-20 mt-1 rounded-md max-h-6'>
         {admins.length === 0 ? (
           <p className='text-white'>Tidak ada admin lain yang sedang online.</p>
