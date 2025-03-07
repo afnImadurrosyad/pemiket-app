@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import toast from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function VerifyPage() {
   const [nim, setNim] = useState('');

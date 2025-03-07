@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import styles from '../styles/voting.module.css'; // Import CSS Module
 import toast from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function VotingPage() {
   const [votes, setVotes] = useState([]);
