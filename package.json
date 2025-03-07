@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^3.0.2",
     "emailjs-com": "^3.2.0",
     "gsap": "^3.12.7",
