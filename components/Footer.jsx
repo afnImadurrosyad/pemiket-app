@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Instagram, Mail } from 'lucide-react'; // Pakai ikon dari Lucide
+import { Instagram, Mail, Phone } from 'lucide-react'; // Tambahkan ikon WhatsApp
 import Link from 'next/link';
 
 export default function Footer() {
@@ -78,6 +78,16 @@ export default function Footer() {
               className='text-2xl hover:text-white transition ease-out duration-200'
               whileHover={{ scale: 1.2 }}>
               <Mail />
+            </motion.a>
+
+            {/* WhatsApp Link */}
+            <motion.a
+              href='https://wa.me/6285337400409'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-2xl hover:text-white transition ease-out duration-200'
+              whileHover={{ scale: 1.2 }}>
+              <Phone />
             </motion.a>
           </div>
         </div>
