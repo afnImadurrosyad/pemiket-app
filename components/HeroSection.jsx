@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function HeroSection() {
-  const targetDate = new Date('2025-03-17T00:00:00').getTime();
+  const targetDate = new Date('2023-03-17T00:00:00').getTime();
   const [timeLeft, setTimeLeft] = useState(targetDate - new Date().getTime());
   const [isSticky, setIsSticky] = useState(false);
   const [hideOnFooter, setHideOnFooter] = useState(false);
