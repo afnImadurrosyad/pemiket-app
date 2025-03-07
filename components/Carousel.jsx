@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import supabase from '../lib/supabase';
 import Card from './Card';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Carousel() {
   const [candidates, setCandidates] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [direction, setDirection] = useState(1); // 1 untuk next, -1 untuk prev
 
   // Fetch data dari Supabase
   useEffect(() => {
@@ -29,8 +31,9 @@ export default function Carousel() {
   useEffect(() => {
     if (isMobile && candidates.length > 1) {
       const interval = setInterval(() => {
+        setDirection(1);
         setCurrentIndex((prevIndex) => (prevIndex + 1) % candidates.length);
-      }, 5000);
+      }, 8000);
       return () => clearInterval(interval);
     }
   }, [candidates, isMobile]);
@@ -46,18 +49,42 @@ export default function Carousel() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // **Animasi saat berpindah kandidat (Hanya untuk HP)**
+  const variants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 100 : -100,
+      opacity: 0,
+    }),
+    center: { x: 0, opacity: 1 },
+    exit: (direction) => ({
+      x: direction > 0 ? -100 : 100,
+      opacity: 0,
+    }),
+  };
+
   return (
     <section
       id='kandidat'
       className='bg-gray-100 border-y-2 border-green-500 w-full flex flex-col items-center py-6'>
-      <h2 className='text-2xl font-bold text-green-700 my-4'>
+      <motion.h2
+        className='text-2xl text-center font-bold text-green-700 my-4'
+        initial={{ opacity: 0, y: +50, scale: 0 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}>
         Kandidat Ketua Angkatan Algovista
-      </h2>
+      </motion.h2>
 
-      {/* Mode Grid (Laptop) */}
+      {/* Mode Grid (Laptop) dengan animasi */}
       <div className='hidden md:flex justify-center gap-6 flex-wrap w-full px-6'>
-        {candidates.map((candidate) => (
-          <Card key={candidate.nim} {...candidate} />
+        {candidates.map((candidate, index) => (
+          <motion.div
+            key={candidate.nim}
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: index * 0.2 }}
+            viewport={{ once: false }}>
+            <Card {...candidate} />
+          </motion.div>
         ))}
       </div>
 
@@ -66,29 +93,42 @@ export default function Carousel() {
         <div className='relative w-full flex justify-center items-center'>
           {/* Tombol Prev */}
           <button
-            onClick={() =>
+            onClick={() => {
+              setDirection(-1);
               setCurrentIndex((prevIndex) =>
                 prevIndex === 0 ? candidates.length - 1 : prevIndex - 1
-              )
-            }
+              );
+            }}
             className='absolute left-4 bg-green-300 text-green-600 bg-opacity-70 hover:bg-opacity-90 p-2 rounded-full shadow-lg'>
             ◀
           </button>
 
-          {/* Render Card hanya jika ada kandidat */}
-          {candidates.length > 0 ? (
-            <Card {...candidates[currentIndex]} />
-          ) : (
-            <p className='text-gray-500'>Belum ada kandidat</p>
-          )}
+          {/* **Wrapper Card dengan min-height agar tidak hilang** */}
+          <div className='relative w-72 md:w-80flex justify-center items-center'>
+            <AnimatePresence custom={direction} mode='wait'>
+              {candidates.length > 0 && (
+                <motion.div
+                  key={candidates[currentIndex]?.nim}
+                  variants={variants}
+                  initial='enter'
+                  animate='center'
+                  exit='exit'
+                  custom={direction}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}>
+                  <Card {...candidates[currentIndex]} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* Tombol Next */}
           <button
-            onClick={() =>
+            onClick={() => {
+              setDirection(1);
               setCurrentIndex(
                 (prevIndex) => (prevIndex + 1) % candidates.length
-              )
-            }
+              );
+            }}
             className='absolute right-4 bg-green-300 text-green-600 bg-opacity-70 hover:bg-opacity-90 p-2 rounded-full shadow-lg'>
             ▶
           </button>

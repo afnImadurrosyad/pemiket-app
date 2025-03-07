@@ -8,7 +8,7 @@ import supabase from '../lib/supabase';
 import Link from 'next/link';
 import style from '../styles/index.module.css';
 import { Menu, X } from 'lucide-react';
-import Feedback from './../components/Feedback';
+import Rundown from './../components/Rundown';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +54,7 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <Corousel />
+      <Rundown />
       <Feedbackk />
     </div>
   );
