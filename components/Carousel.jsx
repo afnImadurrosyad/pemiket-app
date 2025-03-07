@@ -72,7 +72,7 @@ export default function Carousel() {
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
         viewport={{ once: true }}>
-        Kandidat Ketua Angkatan Algovista
+        Kandidat <br /> Ketua Angkatan Algovista
       </motion.h2>
 
       {/* Mode Grid (Laptop) dengan animasi */}

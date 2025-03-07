@@ -33,7 +33,7 @@ export default function HeroSection() {
   };
 
   // **Split Text into Words** (untuk animasi per kata)
-  const sentence1 = 'Selamat Datang di Bumi Ketupat'.split(' ');
+  const sentence1 = 'Selamat Datang di BUMI KETUPAT'.split(' ');
   const sentence2 =
     'Platform informasi resmi untuk milih Ketang dua empat.'.split(' ');
 
@@ -61,7 +61,7 @@ export default function HeroSection() {
         </h1>
 
         {/* Animasi Per Kata untuk Deskripsi */}
-        <p className='text-lg md:text-xl mt-4 flex flex-wrap justify-center'>
+        <p className='text-base md:text-xl mt-4 flex flex-wrap justify-center'>
           {sentence2.map((word, index) => (
             <motion.span
               key={index}
