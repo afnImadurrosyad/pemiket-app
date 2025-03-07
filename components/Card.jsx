@@ -15,7 +15,7 @@ export default function Card({
     : `https://your-supabase-url/storage/v1/object/public/${image}`;
 
   return (
-    <div className='w-72 md:w-96 h-auto max-h-screen border-t-4 border-yellow-400 shadow-lg rounded-lg p-4 bg-green-300'>
+    <div className='w-72 md:w-96 h-auto border-t-2 border-yellow-400 shadow-lg rounded-lg p-4 bg-green-300'>
       <div className='flex flex-col justify-center items-center'>
         <div className='w-60 h-60 relative flex'>
           <Image

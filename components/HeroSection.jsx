@@ -5,6 +5,7 @@ export default function HeroSection() {
   const targetDate = new Date('2025-03-17T00:00:00').getTime();
   const [timeLeft, setTimeLeft] = useState(targetDate - new Date().getTime());
   const [isSticky, setIsSticky] = useState(false);
+  const [hideOnFooter, setHideOnFooter] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,8 +17,17 @@ export default function HeroSection() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 100);
+      const footer = document.getElementById('footer');
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // **Tombol muncul setelah melewati "home" dan hilang saat mencapai footer**
+        setIsSticky(window.scrollY > 100);
+        setHideOnFooter(footerRect.top < windowHeight);
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -40,7 +50,7 @@ export default function HeroSection() {
   return (
     <section
       id='home'
-      className=' h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
+      className='h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
       <div className='mx-4'>
         {/* Animasi Per Kata untuk Judul */}
         <h1 className='text-4xl md:text-6xl font-bold flex flex-wrap justify-center'>
@@ -91,7 +101,8 @@ export default function HeroSection() {
           }}>
           <div className='bg-green-500/60 backdrop-blur-md shadow-lg border border-white/40 z-40 p-4 rounded-lg mt-4'>
             {timeLeft > 0 ? (
-              <div className='text-xl font-bold text-red-600'>
+              <div className='text-sm font-bold text-red-600'>
+                <p>Voting akan dibuka dalam :</p>
                 {formatTime(timeLeft)}
               </div>
             ) : (
@@ -103,7 +114,7 @@ export default function HeroSection() {
             {/* Tombol Voting */}
             <a
               href={timeLeft > 0 ? '#' : '/voting'}
-              className={`mt-2 inline-block py-3 px-6 rounded-lg font-bold transition ${
+              className={`mt-2 inline-block py-3 px-12 rounded-lg font-bold transition ${
                 timeLeft > 0
                   ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
                   : 'bg-yellow-500 hover:bg-yellow-600 text-white'
@@ -118,21 +129,21 @@ export default function HeroSection() {
       {/* Sticky Countdown + Tombol Voting */}
       <div
         className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 p-2 w-fit rounded-xl text-center transition-opacity duration-300 ${
-          isSticky ? 'opacity-100' : 'opacity-0'
+          isSticky && !hideOnFooter ? 'opacity-100' : 'opacity-0'
         } bg-white/20 backdrop-blur-md shadow-lg border border-white/40 z-40`}>
         {timeLeft > 0 ? (
-          <div className='text-xl font-bold text-red-600'>
+          <div className='text-sm font-bold text-red-600'>
             {formatTime(timeLeft)}
           </div>
         ) : (
-          <div className='text-xl font-bold text-green-600'>
+          <div className='text-base font-bold text-green-600'>
             Voting Sudah Dibuka!
           </div>
         )}
 
         <a
           href={timeLeft > 0 ? '#' : '/voting'}
-          className={`w-fit inline-block py-2 px-3 rounded-lg font-bold transition ${
+          className={`w-fit inline-block py-2 px-2 text-sm rounded-lg font-bold transition ${
             timeLeft > 0
               ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
               : 'bg-yellow-500 hover:bg-yellow-600 text-white'

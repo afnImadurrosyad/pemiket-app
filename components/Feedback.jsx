@@ -95,18 +95,6 @@ export default function Form() {
             ✅ Thank you for your feedback!
           </motion.p>
         )}
-        {/* Contact Info */}
-        <motion.div
-          className='mt-8 text-center text-gray-700'
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}>
-          <h3 className='text-xl font-semibold'>Contact Information</h3>
-          <p className='mt-2 flex items-center justify-center gap-2'>📞 +62</p>
-          <p className='mt-1 flex items-center justify-center gap-2'>
-            📩 informaticsitera24@gmail.com
-          </p>
-        </motion.div>
       </motion.div>
     </section>
   );
