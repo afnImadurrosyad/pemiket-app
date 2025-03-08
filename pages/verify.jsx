@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import toast from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
+import Head from 'next/head';
 
 export default function VerifyPage() {
   const [nim, setNim] = useState('');
@@ -93,6 +94,9 @@ export default function VerifyPage() {
   return (
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-50'>
       <Analytics />
+      <Head>
+        <title>Voting | Bumi Ketupat</title>
+      </Head>
       <div className='bg-white p-6 rounded-lg shadow-lg text-center mx-4 border-t-4 border-green-400'>
         <h1 className='text-xl font-bold mb-4 text-gray-700'>Verifikasi NIM</h1>
 

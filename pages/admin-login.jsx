@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import bcrypt from 'bcryptjs';
 import toast from 'react-hot-toast';
+import Head from 'next/head';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -95,31 +96,36 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className='min-h-screen flex justify-center items-center bg-gray-100 '>
-      <form
-        onSubmit={handleLogin}
-        className='bg-white p-6 rounded-lg max-w-96 mx-4 shadow-lg border-t-4 border-green-400'>
-        <h2 className='text-xl text-green-600 font-bold mb-4'>Admin Login</h2>
-        <input
-          type='text'
-          placeholder='Username'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className='border p-2 w-full mb-3 text-gray-600'
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className='border p-2 w-full mb-3 text-gray-600'
-        />
-        <button
-          type='submit'
-          className='bg-green-600 text-white w-full p-2 rounded'>
-          Login
-        </button>
-      </form>
-    </div>
+    <>
+      <Head>
+        <title>Admin Login | Bumi Ketupat</title>
+      </Head>
+      <div className='min-h-screen flex justify-center items-center bg-gray-100 '>
+        <form
+          onSubmit={handleLogin}
+          className='bg-white p-6 rounded-lg max-w-96 mx-4 shadow-lg border-t-4 border-green-400'>
+          <h2 className='text-xl text-green-600 font-bold mb-4'>Admin Login</h2>
+          <input
+            type='text'
+            placeholder='Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className='border p-2 w-full mb-3 text-gray-600'
+          />
+          <input
+            type='password'
+            placeholder='Password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='border p-2 w-full mb-3 text-gray-600'
+          />
+          <button
+            type='submit'
+            className='bg-green-600 text-white w-full p-2 rounded'>
+            Login
+          </button>
+        </form>
+      </div>
+    </>
   );
 }

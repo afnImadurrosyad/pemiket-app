@@ -4,6 +4,7 @@ import supabase from '../lib/supabase';
 import styles from '../styles/voting.module.css'; // Import CSS Module
 import toast from 'react-hot-toast';
 import { Analytics } from '@vercel/analytics/react';
+import Head from 'next/head';
 
 export default function VotingPage() {
   const [votes, setVotes] = useState([]);
@@ -98,6 +99,9 @@ export default function VotingPage() {
       //   backgroundPosition: 'center',
       // }}
     >
+      <Head>
+        <title>Voting | Bumi Ketupat</title>
+      </Head>
       <Analytics />
       <div className='mb-6 '>
         <h1 className='text-2xl md:text-3xl font-bold mt-4 md:mt-0 text-green-700 text-center'>

@@ -4,12 +4,12 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer id='footer' className='bg-green-900/60 text-green-950 py-8'>
+    <footer id='footer' className='bg-green-900/80 text-green-200 py-8'>
       <div className='container mx-auto px-6 flex flex-col md:flex-row justify-between items-center'>
         {/* Bagian Kiri - Logo & Copyright */}
         <div className='text-center md:text-left mb-4 md:mb-0'>
           <motion.img
-            src='/image.png'
+            src='/logo-footer.png'
             alt='Logo Pemiket'
             className='w-40 mx-auto md:mx-0'
             initial={{ opacity: 0, scale: 0.5 }}
