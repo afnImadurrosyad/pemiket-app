@@ -160,9 +160,11 @@ export default function StatsSection() {
       </h2>
 
       {stats?.sebaranKelas?.length > 0 ? (
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-6'>
+        <div className='grid grid-cols-2 md:grid-cols-3 gap-6 mt-6'>
           {stats.sebaranKelas.map((kelas, index) => (
-            <div key={index} className='relative w-full max-w-xs mx-auto'>
+            <div
+              key={index}
+              className='relative w-24 h-24 md:w-44 md:h-44 mx-auto'>
               <Doughnut
                 data={chartData(kelas.persentase, 100, '#16a34a')}
                 options={{
@@ -172,7 +174,7 @@ export default function StatsSection() {
                   circumference: 180,
                 }}
               />
-              <p className='absolute inset-0 flex flex-col items-center justify-center text-green-700 font-bold text-lg'>
+              <p className='absolute inset-0 flex flex-col items-center justify-center mt-6 text-green-700 font-bold text-sm md:text-base'>
                 {kelas.persentase.toFixed(2)}%
                 <span className='text-sm text-gray-600'>{kelas.kelas}</span>
               </p>
