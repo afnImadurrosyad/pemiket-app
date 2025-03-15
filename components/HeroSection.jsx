@@ -39,7 +39,7 @@ export default function HeroSection() {
     const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    return `${days} Hari ${hours} Jam`;
+    return `${days} Hari ${hours} Jam ${minutes} menit`;
   };
 
   // **Split Text into Words** (untuk animasi per kata)
