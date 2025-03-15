@@ -16,7 +16,7 @@ export default function Home() {
         className='absolute inset-0 bg-repeat bg-center'
         style={{
           backgroundImage: "url('/background.jpg')",
-          backgroundSize: '55%', // Mengecilkan ukuran background
+          backgroundSize: '55%',
           opacity: 0.4, // Atur opacity ke 50%
         }}
       />
