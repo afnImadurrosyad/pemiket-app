@@ -6,24 +6,45 @@ import WinnerCard from '../components/WinnerCard';
 import StatsSection from '../components/StatsSection';
 import ChartHasil from '@/components/ChartHasil';
 import Navbar from '@/components/Navbar';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 export default function HasilVoting() {
   const [showCountdown, setShowCountdown] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [isReport, setIsReport] = useState();
   const [winners, setWinners] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
+    fetchStatus();
+    if (!isReport) {
+      setTimeout(() => {
+        toast.error('Anda tidak memiliki izin untuk mengakses ini');
+        router.push('./');
+      }, 500);
+    }
+
     if (showResults) {
       fetchWinners();
     }
   }, [showResults]);
+
+  async function fetchStatus() {
+    const { data, error } = await supabase
+      .from('stat-test')
+      .select('status')
+      .eq('name, report');
+
+    if (!error) setIsReport(data);
+  }
 
   async function fetchWinners() {
     const { data, error } = await supabase
       .from('votes')
       .select('option, nim, image, count')
       .order('count', { ascending: false })
-      .limit(3); // Ambil 3 kandidat teratas
+      .limit(3);
 
     if (!error) setWinners(data);
   }
@@ -39,7 +60,7 @@ export default function HasilVoting() {
           opacity: 0.4, // Atur opacity ke 50%
         }}
       />
-      <div className='z-10 mt-20 md:mt-0 flex flex-col justify-center items-center w-sc'>
+      <div className='z-10 mt-10 md:mt-0 flex flex-col justify-center items-center w-sc'>
         {!showCountdown && !showResults && (
           <motion.button
             className='bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold shadow-lg'

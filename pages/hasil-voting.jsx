@@ -1,20 +1,35 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import supabase from '../lib/supabase';
-import Countdown from '../components/Countdown';
 import WinnerCard from '../components/WinnerCard';
 import StatsSection from '../components/StatsSection';
 import ChartHasil from '@/components/ChartHasil';
 import Navbar from '@/components/Navbar';
+import { useRouter } from 'next/router';
 
 export default function HasilVoting() {
-  const [showCountdown, setShowCountdown] = useState(false);
-  const [showResults, setShowResults] = useState(false);
   const [winners, setWinners] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
+    fetchStatus();
+    if (!isReport) {
+      setTimeout(() => {
+        toast.error('Anda tidak memiliki izin untuk mengakses ini');
+        router.push('./');
+      }, 500);
+    }
     fetchWinners();
   }, []);
+
+  async function fetchStatus() {
+    const { data, error } = await supabase
+      .from('stat-test')
+      .select('status')
+      .eq('name, report');
+
+    if (!error) setIsReport(data);
+  }
 
   async function fetchWinners() {
     const { data, error } = await supabase
