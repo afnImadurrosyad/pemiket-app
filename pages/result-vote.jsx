@@ -30,7 +30,7 @@ export default function HasilVoting() {
 
   return (
     <div className='relative min-h-screen flex flex-col justify-center items-center bg-gray-100'>
-      <Navbar />
+      {showResults && <Navbar />}
       <div
         className='absolute inset-0 bg-repeat bg-center'
         style={{

@@ -36,7 +36,7 @@ export default function ChartHasil() {
   }
 
   return (
-    <div className='w-full max-w-3xl max-h-96 bg-white shadow-lg rounded-lg my-6 p-4 pb-16'>
+    <div className='w-full max-h-96 bg-white shadow-lg rounded-lg my-6 p-4 pb-16'>
       <h2 className='text-2xl font-bold text-green-700 text-center mb-4'>
         Grafik Hasil Voting
       </h2>

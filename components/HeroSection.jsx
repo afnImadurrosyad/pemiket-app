@@ -2,18 +2,30 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function HeroSection() {
-  const targetDate = new Date('2025-03-17T16:48:00').getTime();
+  const targetDate = new Date('2023-03-17T16:48:00').getTime();
+  const reportDate = new Date('2022-03-17T19:10:00').getTime();
   const [timeLeft, setTimeLeft] = useState(targetDate - new Date().getTime());
   const [isSticky, setIsSticky] = useState(false);
+  const [isReport, setIsReport] = useState(false);
   const [hideOnFooter, setHideOnFooter] = useState(false);
 
+  // Countdown untuk pemilihan
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date().getTime();
       setTimeLeft(targetDate - now);
-    }, 1000);
+    }, 500);
     return () => clearInterval(interval);
   }, [targetDate]);
+
+  // **Cek waktu pengumuman**
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      setIsReport(now >= reportDate); // **Set TRUE saat waktu pengumuman tercapai**
+    }, 500);
+    return () => clearInterval(interval);
+  }, [reportDate]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +34,6 @@ export default function HeroSection() {
         const footerRect = footer.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
-        // **Tombol muncul setelah melewati "home" dan hilang saat mencapai footer**
         setIsSticky(window.scrollY > 100);
         setHideOnFooter(footerRect.top < windowHeight);
       }
@@ -32,17 +43,17 @@ export default function HeroSection() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Konversi timeLeft ke hari, jam, menit, detik
+  // Format waktu countdown
   const formatTime = (time) => {
-    if (time <= 0) return 'Voting Sudah Dibuka!';
+    if (time <= 0)
+      return isReport ? 'Pengumuman Sudah Dimulai!' : 'Voting Sudah Dibuka!';
     const days = Math.floor(time / (1000 * 60 * 60 * 24));
     const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    return `${days} Hari ${hours} Jam ${minutes} menit`;
+    return `${days} Hari ${hours} Jam ${minutes} Menit`;
   };
 
-  // **Split Text into Words** (untuk animasi per kata)
+  // **Animasi per kata**
   const sentence1 = 'Selamat Datang di Bumi Ketupat'.split(' ');
   const sentence2 =
     'Platform informasi resmi untuk milih Ketang dua empat.'.split(' ');
@@ -52,7 +63,7 @@ export default function HeroSection() {
       id='home'
       className='h-screen flex flex-col items-center z-30 justify-center text-center text-green-700'>
       <div className='mx-4'>
-        {/* Animasi Per Kata untuk Judul */}
+        {/* Animasi Per Kata - Judul */}
         <h1 className='text-4xl md:text-6xl font-bold flex flex-wrap justify-center'>
           {sentence1.map((word, index) => (
             <motion.span
@@ -63,14 +74,14 @@ export default function HeroSection() {
               transition={{
                 ease: 'easeOut',
                 duration: 0.5,
-                delay: index * 0.2, // **Delay antar kata**
+                delay: index * 0.2,
               }}>
               {word}
             </motion.span>
           ))}
         </h1>
 
-        {/* Animasi Per Kata untuk Deskripsi */}
+        {/* Animasi Per Kata - Deskripsi */}
         <p className='text-base md:text-xl mt-4 flex flex-wrap justify-center'>
           {sentence2.map((word, index) => (
             <motion.span
@@ -81,7 +92,7 @@ export default function HeroSection() {
               transition={{
                 ease: 'easeOut',
                 duration: 0.5,
-                delay: index * 0.2, // **Lebih cepat dari judul**
+                delay: index * 0.3,
               }}>
               {word}
             </motion.span>
@@ -102,31 +113,37 @@ export default function HeroSection() {
           <div className='bg-green-500/60 backdrop-blur-md shadow-lg border border-white/40 z-40 p-4 rounded-lg mt-4'>
             {timeLeft > 0 ? (
               <div className='text-sm font-bold text-red-600'>
-                <p>Voting akan dibuka dalam :</p>
+                <p>
+                  {isReport
+                    ? 'Pengumuman akan dimulai dalam:'
+                    : 'Voting akan dibuka dalam:'}
+                </p>
                 {formatTime(timeLeft)}
               </div>
             ) : (
               <div className='text-xl font-bold text-green-700'>
-                Voting Sudah Dibuka!
+                {isReport
+                  ? 'Hasil Voting Sudah keluar!'
+                  : 'Voting Sudah Dibuka!'}
               </div>
             )}
 
-            {/* Tombol Voting */}
+            {/* Tombol Voting atau Pengumuman */}
             <a
-              href={timeLeft > 0 ? '#' : '/voting'}
+              href={isReport ? '/hasil-voting' : timeLeft > 0 ? '#' : '/voting'}
               className={`mt-2 inline-block py-3 px-12 rounded-lg font-bold transition ${
                 timeLeft > 0
                   ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
                   : 'bg-yellow-500 hover:bg-yellow-600 text-white'
               }`}
               onClick={(e) => timeLeft > 0 && e.preventDefault()}>
-              Mulai Voting
+              {isReport ? 'Lihat Pengumuman' : 'Mulai Voting'}
             </a>
           </div>
         </motion.div>
       </div>
 
-      {/* Sticky Countdown + Tombol Voting */}
+      {/* Sticky Countdown + Tombol Floating */}
       <div
         className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 p-2 w-fit rounded-xl text-center transition-opacity duration-300 ${
           isSticky && !hideOnFooter ? 'opacity-100' : 'opacity-0'
@@ -137,19 +154,20 @@ export default function HeroSection() {
           </div>
         ) : (
           <div className='text-base font-bold text-green-600'>
-            Voting Sudah Dibuka!
+            {isReport ? 'Hasil Voting Sudah keluar!' : 'Voting Sudah Dibuka!'}
           </div>
         )}
 
+        {/* Tombol Floating */}
         <a
-          href={timeLeft > 0 ? '#' : '/voting'}
+          href={isReport ? '/hasil-voting' : timeLeft > 0 ? '#' : '/voting'}
           className={`w-fit inline-block py-2 px-2 text-sm rounded-lg font-bold transition ${
             timeLeft > 0
               ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
               : 'bg-yellow-500 hover:bg-yellow-600 text-white'
           }`}
           onClick={(e) => timeLeft > 0 && e.preventDefault()}>
-          Mulai Voting
+          {isReport ? 'Lihat Pengumuman' : 'Mulai Voting'}
         </a>
       </div>
     </section>
