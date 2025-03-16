@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 
 export default function HasilVoting() {
   const [winners, setWinners] = useState([]);
+  const [isReport, setIsReport] = useState();
   const router = useRouter();
 
   useEffect(() => {
