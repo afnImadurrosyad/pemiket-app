@@ -6,6 +6,7 @@ import StatsSection from '../components/StatsSection';
 import ChartHasil from '@/components/ChartHasil';
 import Navbar from '@/components/Navbar';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 export default function HasilVoting() {
   const [winners, setWinners] = useState([]);
