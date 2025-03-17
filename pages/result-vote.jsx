@@ -12,13 +12,15 @@ import toast from 'react-hot-toast';
 export default function HasilVoting() {
   const [showCountdown, setShowCountdown] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [isReport, setIsReport] = useState();
+  const [isReport, setIsReport] = useState(false);
   const [winners, setWinners] = useState([]);
   const router = useRouter();
+  const report = 'report';
 
   useEffect(() => {
     fetchStatus();
-    if (!isReport) {
+    if (isReport === false) {
+      console.log(isReport);
       setTimeout(() => {
         toast.error('Anda tidak memiliki izin untuk mengakses ini');
         router.push('./');
@@ -34,9 +36,11 @@ export default function HasilVoting() {
     const { data, error } = await supabase
       .from('stat-test')
       .select('status')
-      .eq('name, report');
+      .eq('name-stats', report);
 
-    if (!error) setIsReport(data);
+    if (!error) {
+      setIsReport(data);
+    }
   }
 
   async function fetchWinners() {
