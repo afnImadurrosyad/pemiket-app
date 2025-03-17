@@ -79,6 +79,7 @@ export default function VotingPage() {
       console.error('Error voting:', voteError || userError);
     } else {
       localStorage.removeItem('user');
+      toast.apply('voting berhasil, terimakasih');
       router.push('/report');
     }
   }

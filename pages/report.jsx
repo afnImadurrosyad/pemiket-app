@@ -8,7 +8,7 @@ export default function ReportPage() {
   useEffect(() => {
     // Redirect ke halaman utama setelah beberapa detik
     const timeout = setTimeout(() => {
-      router.push('/');
+      router.push('/verify');
     }, 5000);
     return () => clearTimeout(timeout);
   }, [router]);
