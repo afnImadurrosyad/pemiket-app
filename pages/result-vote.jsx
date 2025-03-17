@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 export default function HasilVoting() {
   const [showCountdown, setShowCountdown] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [isReport, setIsReport] = useState(false);
+  const [isReport, setIsReport] = useState();
   const [winners, setWinners] = useState([]);
   const router = useRouter();
   const report = 'report';
@@ -26,7 +26,10 @@ export default function HasilVoting() {
         router.push('./');
       }, 500);
     }
+    fetchWinners();
+  }, []);
 
+  useEffect(() => {
     if (showResults) {
       fetchWinners();
     }
@@ -38,9 +41,7 @@ export default function HasilVoting() {
       .select('status')
       .eq('name-stats', report);
 
-    if (!error) {
-      setIsReport(data);
-    }
+    if (!error) setIsReport(data);
   }
 
   async function fetchWinners() {
