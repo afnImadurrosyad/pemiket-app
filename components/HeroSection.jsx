@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function HeroSection() {
   const targetDate = new Date('2025-03-17T17:00:00').getTime();
-  const reportDate = new Date('2025-03-17T19:10:00').getTime();
+  const reportDate = new Date('2025-03-17T23:10:00').getTime();
   const [timeLeft, setTimeLeft] = useState(targetDate - new Date().getTime());
   const [isSticky, setIsSticky] = useState(false);
   const [isReport, setIsReport] = useState(false);
