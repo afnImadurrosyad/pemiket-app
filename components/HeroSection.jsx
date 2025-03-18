@@ -130,7 +130,7 @@ export default function HeroSection() {
 
             {/* Tombol Voting atau Pengumuman */}
             <a
-              href={isReport ? '/hasil' : timeLeft > 0 ? '#' : '/'}
+              href={isReport ? '/hasil-voting' : timeLeft > 0 ? '#' : '/'}
               className={`mt-2 inline-block py-3 px-12 rounded-lg font-bold transition ${
                 timeLeft > 0
                   ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
@@ -160,7 +160,7 @@ export default function HeroSection() {
 
         {/* Tombol Floating */}
         <a
-          href={isReport ? '/hasil' : timeLeft > 0 ? '#' : '/'}
+          href={isReport ? '/hasil-voting' : timeLeft > 0 ? '#' : '/'}
           className={`w-fit inline-block py-2 px-2 text-sm rounded-lg font-bold transition ${
             timeLeft > 0
               ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
