@@ -137,7 +137,7 @@ export default function StatsSection() {
             },
             {
               label: 'Partisipasi',
-              value: stats.persentasePartisipasi.toFixed(2),
+              value: stats.persentasePartisipasi.toFixed(2) + '%',
               text: stats.persentasePartisipasi.toFixed(2) + '%',
               color: '#ef4444',
             },
