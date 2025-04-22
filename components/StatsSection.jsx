@@ -158,7 +158,7 @@ export default function StatsSection() {
               <p
                 className='absolute inset-0 flex flex-col items-center justify-center font-bold text-lg'
                 style={{ color: item.color }}>
-                {item.value}
+                {item.text}
                 <span className='text-sm text-gray-600'>{item.label}</span>
               </p>
             </motion.div>

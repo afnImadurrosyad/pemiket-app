@@ -123,21 +123,21 @@ export default function HeroSection() {
             ) : (
               <div className='text-xl font-bold text-green-700'>
                 {isReport
-                  ? 'Hasil Voting Sudah keluar!'
+                  ? 'Open Registration BPA DIbuka!'
                   : 'Voting Sudah Selesai!'}
               </div>
             )}
 
             {/* Tombol Voting atau Pengumuman */}
             <a
-              href={isReport ? '/hasil-voting' : timeLeft > 0 ? '#' : '/'}
+              href={isReport ? '/oprecbpa' : timeLeft > 0 ? '#' : '/'}
               className={`mt-2 inline-block py-3 px-12 rounded-lg font-bold transition ${
                 timeLeft > 0
                   ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
                   : 'bg-yellow-500 hover:bg-yellow-600 text-white'
               }`}
               onClick={(e) => timeLeft > 0 && e.preventDefault()}>
-              {isReport ? 'Lihat Pengumuman' : 'Mulai Voting'}
+              {isReport ? 'Daftar' : 'Mulai Voting'}
             </a>
           </div>
         </motion.div>
@@ -154,20 +154,22 @@ export default function HeroSection() {
           </div>
         ) : (
           <div className='text-base font-bold text-green-600'>
-            {isReport ? 'Hasil Voting Sudah keluar!' : 'Voting sudah selesai!'}
+            {isReport
+              ? 'Open Registration BPA DIbuka!'
+              : 'Voting sudah selesai!'}
           </div>
         )}
 
         {/* Tombol Floating */}
         <a
-          href={isReport ? '/hasil-voting' : timeLeft > 0 ? '#' : '/'}
+          href={isReport ? '/oprecbpa' : timeLeft > 0 ? '#' : '/'}
           className={`w-fit inline-block py-2 px-2 text-sm rounded-lg font-bold transition ${
             timeLeft > 0
               ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
               : 'bg-yellow-500 hover:bg-yellow-600 text-white'
           }`}
           onClick={(e) => timeLeft > 0 && e.preventDefault()}>
-          {isReport ? 'Lihat Pengumuman' : 'Mulai Voting'}
+          {isReport ? 'Daftar' : 'Mulai Voting'}
         </a>
       </div>
     </section>

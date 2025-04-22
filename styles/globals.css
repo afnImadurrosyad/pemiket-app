@@ -14,6 +14,10 @@
   }
 }
 
+.input-style {
+  @apply w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-green-400;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
