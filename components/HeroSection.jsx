@@ -54,9 +54,9 @@ export default function HeroSection() {
   };
 
   // **Animasi per kata**
-  const sentence1 = 'Selamat Datang di Bumi Ketupat'.split(' ');
+  const sentence1 = 'Selamat Datang di Website Resmi Algovista'.split(' ');
   const sentence2 =
-    'Platform informasi resmi untuk milih Ketang dua empat.'.split(' ');
+    'Platform informasi resmi Teknik Informatika ITERA dua empat.'.split(' ');
 
   return (
     <section
